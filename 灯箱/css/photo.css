@@ -1,0 +1,30 @@
+﻿@charset "utf-8";
+body, ul, dl, dd, dt, ol, li, p,  textarea, form, select, fieldset, table, td, div, input{margin:0;padding:0;-webkit-text-size-adjust:none}
+a img{border-radius: 5px;}
+ul, ol, li{list-style-type:none;vertical-align:0}
+a{outline-style:none;color:#535353;text-decoration:none}
+a:hover{color:#D40000; text-decoration:none}
+
+/* 效果CSS开始 */
+.lightbox{width:800px;position:relative;margin:0 auto;}
+.lightbox .btn{position:absolute;cursor:pointer;z-index:99;font-size:50px;font-weight:bold;}
+.lightbox .prev{left:10px;color: #79a4d6;}
+.lightbox #prevTop,.lightbox #nextTop{top:180px;width:32px;height:48px;}
+.lightbox #prev,.lightbox #next{top:460px;width:10px;height:16px;}
+.lightbox #prevTop{background:url(../images/prevBtnTop.png) 0 0 no-repeat;}
+.lightbox #nextTop{background:url(../images/nextBtnTop.png) 0 0 no-repeat;}
+.lightbox .next{right:0px;color: #79a4d6;}
+.lightbox li{float:left;}
+.lightbox .cf li{position:relative;color:#fff;}
+.lightbox .cf a{display:block;width:526px;height:377px;position:absolute;color:#fff;}
+.lightbox .picBox{width:526px; height:394px;margin-left: 65px; padding-left:75px; padding-right:76px;position:relative;overflow:hidden; background:#ffffff; padding-top:10px;border-radius:5px;text-align: center;}
+.lightbox .picBox ul{height:377px;position:absolute; left:0;}
+.lightbox .picBox li{display:inline-block;padding-left:75px; padding-right:1px; width:526px;height:377px;}
+.lightbox .listBox{width:642px;height:100px;margin:0 auto;position:relative; padding-top:15px;overflow:hidden;}
+.lightbox .listBox ul{height:88px;position:absolute; padding-left:12px;}
+.lightbox .listBox li{width:127px;height:77px;cursor:pointer;position:relative; padding:5px 0 0 0;}
+.lightbox .listBox li i{display:none;}
+.lightbox .listBox li a{display:block;width:108px;height:77px;}
+.lightbox .listBox img{border:3px solid #fff;}
+.lightbox .listBox .on img{border:3px solid #79A4D6;}
+.lightbox .listBox .on i{display:block;}
