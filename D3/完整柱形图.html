@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+		<script src="js/d3.min.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<body>
+		<script type="text/javascript">
+			//画布大小
+			var width = 400;
+			var height = 400;
+			
+			//在 body 里添加一个 SVG 画布   
+			var svg = d3.select("body")
+			    .append("svg")
+			    .attr("width", width)
+			    .attr("height", height);
+			
+			//画布周边的空白
+			 var padding = {left:30, right:30, top:20, bottom:20};
+		</script>
+	</body>
+</html>
