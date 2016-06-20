@@ -1,0 +1,336 @@
+
+<html>  
+  <head>  
+        <meta charset="utf-8">  
+        <title>力导向图</title>  
+        <script src="js/d3.min.js" charset="utf-8"></script>
+  </head> 
+
+<style>
+
+body{
+	background-color: #ffffff;
+}
+#tooltip {  
+        position: fixed;  
+        width: 200px;  
+        height: auto;  
+        padding: 10px;  
+        background-color: white;  
+        -webkit-border-radius: 10px;  
+        -moz-border-radius: 10px;  
+        border-radius: 10px;  
+        -webkit-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);  
+        -moz-box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);  
+        box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.4);  
+        pointer-events: none;  
+    }  
+      
+.hidden {  
+      display: none;  
+}  
+      
+#tooltip p {  
+        margin: 0;  
+        font-family: sans-serif;  
+        font-size: 16px;  
+        line-height: 20px;  
+    }  
+</style>
+    <body>  
+    <div id="tooltip" class="hidden">  
+        <p><strong>关系详情：</strong></p>  
+        <p>id:<span id="value"></span></p>  
+    </div> 
+    <script>		   
+					   
+		var nodes = [{name:"林凯",info:"390347039　　　　　　　　　follower:张文亮 赵白白 李俊澜 李江梦 肖欣宏 周骋楠 邹夏路 徐佳靖 吴莹怡 徐洁Jahcenia 孙艺轩 徐春雷 刘翊希 王小纯 吴佳敬 刘卉 陈笑 赵天航UPL 姜山 秦雯KG 邓隽杰 朱铠桐 郭真悦"},
+{name:"张文亮",info:"307413850　　　　　　　　　follower:林凯 刘冰瑶Allen 孙婧瑜"},
+{name:"赵白白",info:"278790152　　　　　　　　　follower:林凯 黄佳鑫Cindy 陶友贤"},
+{name:"李俊澜",info:"570760850　　　　　　　　　follower:林凯 王婷婷"},
+{name:"李江梦",info:"306406304　　　　　　　　　follower:李江梦 匡奕臣Dea"},
+{name:"肖欣宏",info:"316358584　　　　　　　　　follower:林凯 肖雅丹 呂蜜"},
+{name:"周骋楠",info:"90311954　　　　　　　　　follower:林凯 徐文捷 梁琪"},
+{name:"邹夏路",info:"599087314　　　　　　　　　follower:null"},
+{name:"徐佳靖",info:"824034507　　　　　　　　　follower:null"},
+{name:"吴莹怡",info:"546723417　　　　　　　　　follower:林凯 刘振铭"},
+{name:"徐洁Jahcenia",info:"582521896　　　　　　　　　follower:null"},
+{name:"孙艺轩",info:"858782671　　　　　　　　　follower:null"},
+{name:"徐春雷",info:"475103448　　　　　　　　　follower:林凯 朱雨秋"},
+{name:"刘翊希",info:"865815344　　　　　　　　　follower:null"},
+{name:"王小纯",info:"870204059　　　　　　　　　follower:null"},
+{name:"吴佳敬",info:"850916621　　　　　　　　　follower:林凯 李程爱AD 江梦琪"},
+{name:"刘卉",info:"814016874　　　　　　　　　follower:null"},
+{name:"陈笑",info:"583842606　　　　　　　　　follower:null"},
+{name:"赵天航UPL",info:"816596224　　　　　　　　　follower:null"},
+{name:"姜山",info:"854099718　　　　　　　　　follower:null"},
+{name:"秦雯KG",info:"830660149　　　　　　　　　follower:null"},
+{name:"邓隽杰",info:"897052730　　　　　　　　　follower:null"},
+{name:"朱铠桐",info:"543539044　　　　　　　　　follower:null"},
+{name:"郭真悦",info:"510894651　　　　　　　　　follower:涂鸦徐 杜宪正 胡狄 王婷婷"},
+{name:"刘冰瑶Allen",info:"893624530　　　　　　　　　follower:null"},
+{name:"孙婧瑜",info:"870174074　　　　　　　　　follower:null"},
+{name:"黄佳鑫Cindy",info:"337176135　　　　　　　　　follower:黄佳鑫Cindy 陆茂林 扈甜"},
+{name:"陶友贤",info:"881586992　　　　　　　　　follower:曹晖 武肇中 项伟杰"},
+{name:"王婷婷",info:"880542322　　　　　　　　　follower:郭真悦"},
+{name:"金二妮",info:"326417408　　　　　　　　　follower:李江梦"},
+{name:"匡奕臣Dea",info:"895361025　　　　　　　　　follower:null"},
+{name:"肖雅丹",info:"892776758　　　　　　　　　follower:null"},
+{name:"呂蜜",info:"881489723　　　　　　　　　follower:呂蜜 高子阳 涂鸦徐"},
+{name:"徐文捷",info:"895042374　　　　　　　　　follower:null"},
+{name:"梁琪",info:"894283291　　　　　　　　　follower:null"},
+{name:"刘振铭",info:"893944971　　　　　　　　　follower:吴莹怡"},
+{name:"朱雨秋",info:"891227916　　　　　　　　　follower:null"},
+{name:"李程爱AD",info:"895597054　　　　　　　　　follower:吴琴 张敏"},
+{name:"江梦琪",info:"893998963　　　　　　　　　follower:吴佳敬"},
+{name:"王彦翔",info:"889762169　　　　　　　　　follower:黄佳鑫Cindy"},
+{name:"陆茂林",info:"855240627　　　　　　　　　follower:若羽 吴庆龄 段奕宏"},
+{name:"扈甜",info:"361748448　　　　　　　　　follower:弥俊辰 李新媛 李帅"},
+{name:"曹晖",info:"879818633　　　　　　　　　follower:权益ing 杨光 曹冬悦han"},
+{name:"武肇中",info:"893308794　　　　　　　　　follower:刘梓芸 张静Bambi. 杨秋桐"},
+{name:"项伟杰",info:"583157793　　　　　　　　　follower:梁雄伟 Sun孙暮晨Flower 高新洁"},
+{name:"方子攸",info:"889640453　　　　　　　　　follower:呂蜜"},
+{name:"高子阳",info:"883646712　　　　　　　　　follower:王钰 咔咔 王星篪"},
+{name:"涂鸦徐",info:"880638274　　　　　　　　　follower:涂鸦徐 杜宪正 胡狄"},
+{name:"吴琴",info:"892859052　　　　　　　　　follower:null"},
+{name:"张敏",info:"893407954　　　　　　　　　follower:张敏 杨秋桐"},
+{name:"若羽",info:"851392931　　　　　　　　　follower:null"},
+{name:"吴庆龄",info:"349436594　　　　　　　　　follower:null"},
+{name:"段奕宏",info:"243130974　　　　　　　　　follower:陆茂林"},
+{name:"弥俊辰",info:"890553928　　　　　　　　　follower:null"},
+{name:"李新媛",info:"890550912　　　　　　　　　follower:null"},
+{name:"李帅",info:"890550227　　　　　　　　　follower:null"},
+{name:"曾钰照",info:"90550227　　　　　　　　　follower:扈甜"},
+{name:"权益ing",info:"893956448　　　　　　　　　follower:null"},
+{name:"杨光",info:"514632508　　　　　　　　　follower:null"},
+{name:"曹冬悦han",info:"893628746　　　　　　　　　follower:曹晖"},
+{name:"刘梓芸",info:"896361558　　　　　　　　　follower:null"},
+{name:"张静Bambi.",info:"448785935　　　　　　　　　follower:null"},
+{name:"杨秋桐",info:"895800058　　　　　　　　　follower:null"},
+{name:"梁雄伟",info:"896971142　　　　　　　　　follower:null"},
+{name:"Sun孙暮晨Flower",info:"522195317　　　　　　　　　follower:null"},
+{name:"高新洁",info:"505702210　　　　　　　　　follower:项伟杰"},
+{name:"王钰",info:"894507597　　　　　　　　　follower:null"},
+{name:"咔咔",info:"886154866　　　　　　　　　follower:null"},
+{name:"王星篪",info:"336938393　　　　　　　　　follower:null"},
+{name:"陈旭",info:"334059727　　　　　　　　　follower:涂鸦徐"},
+{name:"杜宪正",info:"895711446　　　　　　　　　follower:null"},
+{name:"胡狄",info:"893229920　　　　　　　　　follower:null"},
+{name:"黄晓洁",info:"289029097　　　　　　　　　follower:null"},
+{name:"张宇卿yuk",info:"896702850　　　　　　　　　follower:张敏"}
+];
+					 
+		var edges = [ 
+		{source:0,target:1,color:1},
+{source:0,target:2,color:1},
+{source:0,target:3,color:1},
+{source:0,target:4,color:1},
+{source:0,target:5,color:1},
+{source:0,target:6,color:1},
+{source:0,target:7,color:1},
+{source:0,target:8,color:1},
+{source:0,target:9,color:1},
+{source:0,target:10,color:1},
+{source:0,target:11,color:1},
+{source:0,target:12,color:1},
+{source:0,target:13,color:1},
+{source:0,target:14,color:1},
+{source:0,target:15,color:1},
+{source:0,target:16,color:1},
+{source:0,target:17,color:1},
+{source:0,target:18,color:1},
+{source:0,target:19,color:1},
+{source:0,target:20,color:1},
+{source:0,target:21,color:1},
+{source:0,target:22,color:1},
+{source:0,target:23,color:1},
+{source:0,target:21,color:1},
+{source:0,target:22,color:1},
+{source:0,target:23,color:1},
+{source:0,target:21,color:1},
+{source:0,target:22,color:1},
+{source:0,target:23,color:1},
+{source:0,target:21,color:1},
+{source:0,target:22,color:1},
+{source:0,target:23,color:1},
+{source:0,target:21,color:1},
+{source:0,target:22,color:1},
+{source:0,target:23,color:1},
+{source:0,target:21,color:1},
+{source:0,target:22,color:1},
+{source:0,target:23,color:1},
+{source:1,target:0,color:2},
+{source:1,target:24,color:1},
+{source:1,target:25,color:1},
+{source:2,target:0,color:2},
+{source:2,target:26,color:1},
+{source:2,target:27,color:1},
+{source:3,target:0,color:2},
+{source:3,target:28,color:1},
+{source:4,target:0,color:2},
+{source:4,target:29,color:1},
+{source:29,target:4,color:2},
+{source:4,target:30,color:1},
+{source:5,target:0,color:2},
+{source:5,target:31,color:1},
+{source:5,target:32,color:1},
+{source:6,target:0,color:2},
+{source:6,target:33,color:1},
+{source:6,target:34,color:1},
+{source:9,target:0,color:2},
+{source:9,target:35,color:1},
+{source:35,target:9,color:2},
+{source:12,target:0,color:2},
+{source:12,target:36,color:1},
+{source:15,target:0,color:2},
+{source:15,target:37,color:1},
+{source:15,target:38,color:1},
+{source:38,target:15,color:2},
+{source:26,target:39,color:1},
+{source:39,target:26,color:2},
+{source:26,target:40,color:1},
+{source:26,target:41,color:1},
+{source:27,target:42,color:1},
+{source:27,target:43,color:1},
+{source:27,target:44,color:1},
+{source:32,target:45,color:1},
+{source:45,target:32,color:2},
+{source:32,target:46,color:1},
+{source:32,target:47,color:1},
+{source:47,target:32,color:2},
+{source:37,target:48,color:1},
+{source:37,target:49,color:1},
+{source:23,target:28,color:1},
+{source:23,target:28,color:1},
+{source:40,target:50,color:1},
+{source:40,target:51,color:1},
+{source:40,target:52,color:1},
+{source:52,target:40,color:2},
+{source:41,target:53,color:1},
+{source:41,target:54,color:1},
+{source:41,target:55,color:1},
+{source:56,target:41,color:1},
+{source:42,target:57,color:1},
+{source:42,target:58,color:1},
+{source:42,target:59,color:1},
+{source:59,target:42,color:2},
+{source:43,target:60,color:1},
+{source:43,target:61,color:1},
+{source:43,target:62,color:1},
+{source:44,target:63,color:1},
+{source:44,target:64,color:1},
+{source:44,target:65,color:1},
+{source:65,target:44,color:2},
+{source:23,target:28,color:1},
+{source:23,target:28,color:1},
+{source:23,target:28,color:1},
+{source:46,target:66,color:1},
+{source:46,target:67,color:1},
+{source:46,target:68,color:1},
+{source:47,target:69,color:1},
+{source:69,target:47,color:2},
+{source:47,target:70,color:1},
+{source:47,target:71,color:1},
+{source:23,target:28,color:1},
+{source:28,target:23,color:2},
+{source:49,target:72,color:1},
+{source:49,target:73,color:1},
+{source:73,target:49,color:2},
+{source:49,target:62,color:1}
+
+		];
+		
+		var width = 1200;
+		var height = 1000;
+		var colors=d3.scale.category10()
+		
+		var svg = d3.select("body")
+					.append("svg")
+					.attr("width",width)
+					.attr("height",height);
+            
+		var force = d3.layout.force()
+				.nodes(nodes)		//指定节点数组
+				.links(edges)		//指定连线数组
+				.size([width,height])	//指定范围
+				.linkDistance(150)	//指定连线长度
+				.charge(-400);	//相互之间的作用力
+
+		force.start();	//开始作用
+
+		console.log(nodes);
+		console.log(edges);
+		
+		//添加连线		
+		var svg_edges = svg.selectAll("line")
+							.data(edges)
+							.enter()
+							.append("line")
+							.style("stroke",function(d){//  设置线的颜色  
+    return colors(d.color);})
+							.style("stroke-width",1);
+		
+		var color = d3.scale.category20();
+				
+		//添加节点			
+		var svg_nodes = svg.selectAll("circle")
+							.data(nodes)
+							.enter()
+							.append("circle")
+							.attr("r",10)
+							.style("fill",function(d,i){
+								return color(i);
+							})
+							.call(force.drag)//使得节点能够拖动
+							.on("mouseover",function(d,event) {  
+                    //取得提示显示的位置  
+                          
+								    var e = window.event; 
+								    var x=e.clientX+10;
+								    var y =e.clientY+10;
+                    d3.select("#tooltip")  
+                        .style("left",x+"px")  
+                        .style("top", y+"px")                       
+                        .select("#value")  
+                        .text(d.info);
+                    d3.select("#tooltip").classed("hidden", false);  
+                })  
+                //移除提示条   
+                .on("mouseout", function() {  
+                    //(4)添加隐藏类  
+                    d3.select("#tooltip").classed("hidden", true);//ID 选择的语法："#tooltip"  
+                });  
+		//添加描述节点的文字
+		var svg_texts = svg.selectAll("text")
+							.data(nodes)
+							.enter()
+							.append("text")
+							.style("fill", "black")
+							.attr("dx", 20)
+							.attr("dy", 8)
+							.text(function(d){
+								return d.name;
+							});
+					
+
+		force.on("tick", function(){	//对于每一个时间间隔
+		
+			 //更新连线坐标
+			 svg_edges.attr("x1",function(d){ return d.source.x; })
+			 		.attr("y1",function(d){ return d.source.y; })
+			 		.attr("x2",function(d){ return d.target.x; })
+			 		.attr("y2",function(d){ return d.target.y; });
+			 
+			 //更新节点坐标
+			 svg_nodes.attr("cx",function(d){ return d.x; })
+			 		.attr("cy",function(d){ return d.y; });
+
+			 //更新文字坐标
+			 svg_texts.attr("x", function(d){ return d.x; })
+			 	.attr("y", function(d){ return d.y; });
+		});
+		  
+        </script>  
+		
+    </body>  
+</html>  

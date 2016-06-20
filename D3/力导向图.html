@@ -18,13 +18,13 @@
 					  { name: "上海"   }, { name: "青岛"    },
 					  { name: "天津"    } ];
 					 
-		var edges = [  { source : 0  , target: 1 } , { source : 0  , target: 2 } ,
-					   { source : 0  , target: 3 } , { source : 1  , target: 4 } ,
-					   { source : 1  , target: 5 } , { source : 1  , target: 6 }  ];	
+		var edges = [  { source : 0  , target: 1 , color: 1} , { source : 0  , target: 2 ,color: 1},
+					   { source : 0  , target: 3 ,color: 2} , { source : 1  , target: 4 ,color: 2} ,
+					   { source : 1  , target: 5 ,color: 2} , { source : 1  , target: 6 ,color:2 }  ];	
 		
-		var width = 400;
-		var height = 400;
-		
+		var width = 1200;
+		var height = 500;
+		var colors=d3.scale.category10()
 		
 		var svg = d3.select("body")
 					.append("svg")
@@ -48,7 +48,8 @@
 							.data(edges)
 							.enter()
 							.append("line")
-							.style("stroke","#ccc")
+							.style("stroke",function(d){//  设置线的颜色  
+    return colors(d.color);})
 							.style("stroke-width",1);
 		
 		var color = d3.scale.category20();
